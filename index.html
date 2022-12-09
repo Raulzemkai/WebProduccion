@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://localhost/Mis%20proyectos/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Linea de producción</title>
+	<link rel="stylesheet" type="text/css" href="./index_files/estilo.css">
+<style type="text/css">@font-face { font-family: Roboto; src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf"); }</style></head>
+<body style="background-color: #FF5733 ;">
+	<h1>Linea De Producción Pastel</h1>
+	
+	<div class="contenido">
+		<div>
+		<h2>Introducción</h2>
+		<p>Como línea de producción entendemos al conjunto de operaciones secuenciales en las que se organiza un proceso para la fabricación de un producto. Para la fabricación de un gran número de unidades del mismo producto se requiere organizar un montaje en serie de las distintas operaciones requeridas para su transformación de materias prima en producto. Esto implica la organización del proceso en fases y operaciones que se asignan individualmente o por grupos de trabajo. La asignación se hace a trabajadores y/o a maquinaria y/o herramientas en cada fase u operación. Por lo que la producción en línea también requiere de operarios especializados en las diferentes fases u operaciones. Otra característica de la producción en línea es que las operaciones se hacen por separado hasta llegar al montaje final de todas ellas para terminar la fabricación del producto.
+		</p><p>Permite que cada parte del proceso pueda ser planificado. Tienen la gran ventaja que al hacer una división de las etapas de la producción, se evitan muchos riesgos. Por ejemplo el de pasar por alto algún trabajo sobre el material o la materia prima. Al ser un proceso controlado y bien organizado tienen como resultado que el producto final sea el que se requiere. Otra de las ventajas que ofrecen es que permiten solucionar e idear estrategias para el aumento de la producción sin generar contratiempos inesperados, ya que los procesos se repiten de manera automática y no hay cabida para el error humano.</p>
+		</div>
+	</div>
+	<div style="text-align: center;"><img width="300" src="./index_files/pastel.jpg"></div>
+
+	<div class="ingrdientes"></div>
+	<div>
+		<h2 style="text-align: center;">Ingredientes</h2>
+	</div>
+	<div class="centrar-lista">
+	<ul>
+		<li>1 - Mantequilla.</li>
+		<li>2 - Azúcar.</li>
+		<li>3 - Huevos.</li>
+		<li>4 - Harina.</li>
+		<li>5 - Cocoa.</li>
+		<li>6 - Leche.</li>
+		<li>7 - Vainilla.</li>
+		<li>8 -Polvo para hornear.</li>
+	</ul>
+	</div>
+
+<center><h2>Automata finito</h2></center>
+<img src="./index_files/Linea1.png">
+<center><h2>Automata finito con concurrencias</h2></center>
+<img src="./index_files/Linea2.png">
+<center><h2>Codigo DLV</h2></center>
+     <pre> $out</pre>
+<center><textarea style="margin: 0px;" class="estilotextarea" cols="100" rows="30" id="contenido3">DLV [build BEN/Dec 17 2012   gcc 4.6.1]
+
+STATE 0: Hornear(1), PastelListo(0), fasePreparar(0), ingredianteLiquido(1), ingredienteSeco(1), rellenoFruta(1)
+ACTIONS: mezclarAzucar, mezclarHarina, mezclarPolvo, mezclarCocoa
+STATE 1: -ingredienteSeco(1), ingredianteLiquido(1), rellenoFruta(1), Hornear(1), PastelListo(0), ingredienteSeco(0), fasePreparar(1)
+ACTIONS: batirMantequilla, batirHuevos, batirLeche, batirVainilla
+STATE 2: -ingredianteLiquido(1), rellenoFruta(1), Hornear(1), PastelListo(0), ingredienteSeco(0), ingredianteLiquido(0), fasePreparar(2)
+ACTIONS: agregarMango, agregarDurazno, agregarFresa, agregarKiwi
+STATE 3: -rellenoFruta(1), Hornear(1), PastelListo(0), ingredienteSeco(0), ingredianteLiquido(0), rellenoFruta(0), fasePreparar(3)
+ACTIONS: Hornearmasa
+STATE 4: -Hornear(1), PastelListo(0), ingredienteSeco(0), ingredianteLiquido(0), rellenoFruta(0), Hornear(0), fasePreparar(4)
+ACTIONS: Final
+STATE 5: -PastelListo(0), ingredienteSeco(0), ingredianteLiquido(0), rellenoFruta(0), Hornear(0), fasePreparar(5)
+PLAN: mezclarAzucar, mezclarHarina, mezclarPolvo, mezclarCocoa; batirMantequilla, batirHuevos, batirLeche, batirVainilla; agregarMango, agregarDurazno, agregarFresa, agregarKiwi; Hornearmasa; Final
+
+Check whether that plan is secure (y/n)? 
+Search for other plans (y/n)? </textarea></center>
+
+	<footer style="width:100%; margin-left: 0px;">
+
+<div class="copyright" style="background-color: black;">
+    <div class="container-fluid" style="background-color: black; color: white;">
+        ©  Copyright: Universidad Interamericana
+
+    </div>
+</div>
+
+
+</footer><script>
+		var returnedSuggestion = ''
+		let editor, doc, cursor, line, pos
+		document.addEventListener("keydown", (event) => {
+		setTimeout(()=>{
+			editor = event.target.closest('.CodeMirror');
+			if (editor){
+				doc = editor.CodeMirror.getDoc()
+				cursor = doc.getCursor()
+				line = doc.getLine(cursor.line)
+				pos = {line: cursor.line, ch: line.length}
+				if (event.key == "Enter"){
+					var query = doc.getRange({ line: Math.max(0,cursor.line-10), ch: 0 }, { line: cursor.line, ch: 0 })
+					window.postMessage({source: 'getSuggestion', payload: { data: query } } )
+					//displayGrey(query)
+				}
+				else if (event.key == "ArrowRight"){
+					acceptTab(returnedSuggestion)
+				}
+			}
+		}, 0)
+		})
+
+		function acceptTab(text){
+		if (suggestionDisplayed){
+			doc.replaceRange(text, pos)
+			suggestionDisplayed = false
+		}
+		}
+		function displayGrey(text){
+		var element = document.createElement('span')
+		element.innerText = text
+		element.style = 'color:grey'
+		var lineIndex = pos.line;
+		editor.getElementsByClassName('CodeMirror-line')[lineIndex].appendChild(element)
+		suggestionDisplayed = true
+		}
+		window.addEventListener('message', (event)=>{
+		if (event.source !== window ) return
+		if (event.data.source == 'return'){
+			returnedSuggestion = event.data.payload.data
+			displayGrey(event.data.payload.data)
+		}
+		})
+	</script></body></html>
